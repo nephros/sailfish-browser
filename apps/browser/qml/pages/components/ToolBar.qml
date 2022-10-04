@@ -298,7 +298,7 @@ Column {
             onPressAndHold: {
                 var url = webView.url
                 if (url) {
-                    Clipboard.text = url
+                    Clipboard.text = encodeURI(url)
                     urlCopyNotice.show()
                 }
             }
