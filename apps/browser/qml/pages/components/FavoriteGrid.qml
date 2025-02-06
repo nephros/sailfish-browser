@@ -85,6 +85,7 @@ IconGridViewBase {
                                        // "Edit bookmark"
                                        "description": qsTrId("sailfish_browser-he-edit-bookmark"),
                                        "url": url,
+                                       "favicon": favicon,
                                        "title": title,
                                        "index": index,
                                    })

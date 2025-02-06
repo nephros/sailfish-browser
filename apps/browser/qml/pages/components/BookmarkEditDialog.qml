@@ -18,14 +18,13 @@ UserPromptDialog {
 
     property string url
     property string title
+    property string favicon
+    property string thumbnail
     property int index
     property string description
 
     property alias editedUrl: urlField.text
     property alias editedTitle: titleField.text
-
-    property bool showIcons: false
-    property string iconData: ""
 
     canAccept: urlField.acceptableInput && titleField.acceptableInput
 

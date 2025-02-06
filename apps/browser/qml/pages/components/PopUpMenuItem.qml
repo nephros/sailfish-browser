@@ -93,7 +93,7 @@ Item {
                             stack.animatorPush("AddToAppGridDialog.qml", {
                                 "url": page.url,
                                 "title": page.title,
-                                "icon": data,
+                                "thumbnail": data,
                                 "desktopBookmarkWriter": writer,
                                 "bookmarkWriterParent": stack
                             })
@@ -107,7 +107,7 @@ Item {
                         pageStack.animatorPush("AddToAppGridDialog.qml", {
                             "url": url,
                             "title": title,
-                            "icon": page.favicon,
+                            "favicon": page.favicon,
                             "desktopBookmarkWriter": desktopBookmarkWriter,
                             "bookmarkWriterParent": pageStack
                         })
