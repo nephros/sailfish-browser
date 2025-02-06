@@ -24,6 +24,9 @@ UserPromptDialog {
     property alias editedUrl: urlField.text
     property alias editedTitle: titleField.text
 
+    property bool showIcons: false
+    property string iconData: ""
+
     canAccept: urlField.acceptableInput && titleField.acceptableInput
 
     onAcceptBlocked: {
@@ -114,6 +117,45 @@ UserPromptDialog {
                 validator: RegExpValidator {
                     regExp: /^https?:\/\/.+/
                 }
+            }
+            Row {
+               id: iconRow
+               width: parent.width
+               anchors.horizontalCenter: parent.horizontalCenter
+               spacing: Theme.paddingLarge
+               IconButton {
+                   height: 256
+                   width: 256
+                   icon.source: page.favicon
+                   onClicked: {
+                       icon.grabToImage(
+                           function(result) { root.iconData = result.image },
+                           Qt.size(width, height)
+                       )
+                   }
+               }
+               IconButton {
+                   height: 256
+                   width: 256
+                   property ItemGrabResult imageData
+                   Component.onCompleted: {
+                       icon.grabToImage(
+                           function(result) { imageData = result },
+                           Qt.size(width, height)
+                       )
+                   }
+               }
+               IconButton {
+                   height: 256
+                   width: 256
+                   icon.source: "image://theme/icon-m-bookmark"
+                   onClicked: {
+                       icon.grabToImage(
+                           function(result) { root.iconData = result.image },
+                           Qt.size(width, height)
+                       )
+                   }
+               }
             }
         }
     }
