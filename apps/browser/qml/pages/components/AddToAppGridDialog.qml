@@ -6,6 +6,8 @@ BookmarkEditDialog {
     property Component desktopBookmarkWriter
     property QtObject bookmarkWriterParent
 
+    showIcons: true
+
     //% "Add to App Grid"
     description: qsTrId("sailfish_browser-he-add_bookmark_to_launcher")
     onAccepted: {
