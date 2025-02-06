@@ -25,6 +25,8 @@ UserPromptDialog {
     property alias editedUrl: urlField.text
     property alias editedTitle: titleField.text
 
+    property var iconData
+
     canAccept: urlField.acceptableInput && titleField.acceptableInput
 
     onAcceptBlocked: {
@@ -114,44 +116,50 @@ UserPromptDialog {
                     regExp: /^https?:\/\/.+/
                 }
             }
-            Row {
-               id: iconRow
-               width: parent.width
-               anchors.horizontalCenter: parent.horizontalCenter
-               spacing: Theme.paddingLarge
-               IconButton {
-                   height: 256
-                   width: 256
-                   icon.source: page.favicon
-                   onClicked: {
-                       icon.grabToImage(
-                           function(result) { root.iconData = result.image },
-                           Qt.size(width, height)
-                       )
-                   }
-               }
-               IconButton {
-                   height: 256
-                   width: 256
-                   property ItemGrabResult imageData
-                   Component.onCompleted: {
-                       icon.grabToImage(
-                           function(result) { imageData = result },
-                           Qt.size(width, height)
-                       )
-                   }
-               }
-               IconButton {
-                   height: 256
-                   width: 256
-                   icon.source: "image://theme/icon-m-bookmark"
-                   onClicked: {
-                       icon.grabToImage(
-                           function(result) { root.iconData = result.image },
-                           Qt.size(width, height)
-                       )
-                   }
-               }
+            Label { width: parent.width
+                text:  "fav: " + favicon + "\nthumb: " + thumbnail + "\ndefault: default" + "\nimagedata: " + root.iconData
+            }
+            SectionHeader {
+                //% "Grid Icon"
+                text: qsTrId("sailfish_browser-la-url_editor_icon")
+            }
+            BackgroundItem {
+                id: faviconMaker
+                // fixed application grid icon size, so we can grabToImage() correctly
+                height: 256; width: 256
+                anchors.horizontalCenter: parent.horizontalCenter
+                property alias image: image
+                Image {
+                    id: image
+                    anchors.centerIn: parent
+                    anchors.fill: parent
+                    property bool wantGrab
+                    onSourceChanged: {
+                        wantGrab = /^https?:\/\//.test(source)
+                        console.warn("Source changed, grab:", wantGrab)
+                    }
+                    source: {
+                        if (favicon)   return favicon
+                        if (thumbnail) return thumbnail
+                        return "image://theme/icon-launcher-bookmark"
+                    }
+                    Connections {
+                        target: root
+                        onAcceped: {
+                            if (wantGrab && image.status === Image.Ready) {
+                                console.warn("Grabbing Image:")
+                                image.grabToImage(
+                                    function(result) {
+                                        var filePath = StandardPaths.cache + "/" + "appthumb-" + Qt.md5(Date.now() + result.url) + ".png"
+                                        var ok = result.saveToFile(filePath)
+                                        console.warn("Image saved:", ok, filePath)
+                                        root.iconData = ok ? filePath : "icon-launcher-bookmark"
+                                    }, Qt.size(256, 256)
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }

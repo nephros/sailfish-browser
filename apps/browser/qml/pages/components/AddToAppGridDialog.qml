@@ -6,14 +6,12 @@ BookmarkEditDialog {
     property Component desktopBookmarkWriter
     property QtObject bookmarkWriterParent
 
-    showIcons: true
-
     //% "Add to App Grid"
     description: qsTrId("sailfish_browser-he-add_bookmark_to_launcher")
     onAccepted: {
         if (desktopBookmarkWriter) {
             var bookmarkWriter = desktopBookmarkWriter.createObject(bookmarkWriterParent)
-            bookmarkWriter.save(editedUrl, editedTitle, icon)
+            bookmarkWriter.save(editedUrl, editedTitle, iconData ? iconData : icon)
         } else {
             console.log("Cannot save to launcher without bookmark writter!!")
         }

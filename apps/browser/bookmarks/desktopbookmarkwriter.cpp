@@ -10,6 +10,9 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include <QDir>
+#include <QFile>
+#include <QImage>
+#include <QImageReader>
 #include <QtConcurrent>
 
 #include "desktopbookmarkwriter.h"
@@ -50,6 +53,8 @@ void DesktopBookmarkWriter::save(QString url, QString title, QString icon)
 
     if (icon.isEmpty()) {
         icon = DEFAULT_DESKTOP_BOOKMARK_ICON;
+    } else if (!icon.startsWith(QStringLiteral("data:"))) {
+        icon = DesktopBookmarkWriter::encodeIcon(icon);
     }
 
     m_writter.setFuture(QtConcurrent::run(this, &DesktopBookmarkWriter::write, url, title, icon));
@@ -106,4 +111,16 @@ QString DesktopBookmarkWriter::write(const QString &url, const QString &title, c
     } else {
         return "";
     }
+}
+
+QString DesktopBookmarkWriter::encodeIcon(const QString &icon) {
+        QImageReader imageReader(icon);
+        QImage image = imageReader.read();
+        if (image.isNull()) return icon;
+        QByteArray ba;
+        QBuffer buffer(&ba);
+        buffer.open(QIODevice::WriteOnly);
+        image.save(&buffer, "PNG");
+        QFile::remove(icon);
+        return QString(BASE64_IMAGE).arg(QString(ba.toBase64(QByteArray::Base64Encoding)));
 }
