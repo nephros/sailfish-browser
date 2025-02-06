@@ -116,6 +116,7 @@ ListItem {
                                                "description": qsTrId("sailfish_browser-he-edit-bookmark"),
                                                "url": url,
                                                "title": title,
+                                               "favicon": favicon,
                                                "index": bookmarkFilterModel.getIndex(model.index)
                                            })
                 }
