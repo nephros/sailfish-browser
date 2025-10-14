@@ -380,6 +380,15 @@ Shared.Background {
                     opacity: 0.1
                 }
 
+                rightItem: IconButton {
+                         onClicked: searchField.text = ""
+                         width: icon.width
+                         height: icon.height
+                         icon.source: "image://theme/icon-m-clear"
+                         opacity: searchField.text.length > 0 ? 1.0 : 0.0
+                         Behavior on opacity { FadeAnimation {} }
+                }
+
                 placeholderText: toolBar.findInPageActive
                                  ? //: Placeholder text for finding text from the web page
                                    //% "Find from page"
