@@ -23,6 +23,7 @@
 #include <QtCore/QtMath>
 #include <QtCore/QVariant>
 #include <QtCore/QVariantMap>
+#include <QtCore/QUrlQuery>
 
 // QtGui
 #include <QtGui/QClipboard>
@@ -38,11 +39,24 @@
 #include "declarativewebutils.h"
 #include "browserpaths.h"
 
+
 static const auto defaultUserAgentUpdateUrl = QStringLiteral("https://browser.sailfishos.org/gecko/91.0/ua-update.json");
 static const auto searchScheme = QStringLiteral("websearch");
 static const auto searchDefaultKey = QStringLiteral("default");
 static const auto searchPrivateFrag = QStringLiteral("#private");
-static const QUrl constructSearchUrl(const QString &engineKey, const QString &terms, bool privateTab);
+static const QUrl constructSearchUrl(const QString &engineKey, const QString &terms, bool privateTab)
+{
+    Q_UNUSED(engineKey)
+    Q_UNUSED(privateTab)
+    QUrl result("https://noai.duckduckgo.com/");
+    QUrlQuery q;
+    q.addQueryItem("kz", "-1"); // instant answers
+    q.addQueryItem("kn", "1");  // new window
+    //q.addQueryItem("k1", "-1"); // ads, tirning off not allowed by DDG
+    q.addQueryItem("kt", "Sail Sans Pro"); // font
+    q.addQueryItem("q", terms);
+    result.setQuery(q);
+}
 
 static DeclarativeWebUtils *gSingleton = 0;
 
@@ -99,6 +113,8 @@ void DeclarativeWebUtils::openUrl(const QString &url)
         }
     }
 
+    // URL schema: 'websearch://enginename/search terms#private'
+    //              scheme      host       path         fragment
     if (!url.isEmpty() && (targetUrl.scheme() == searchScheme)) {
         const QString engineKey = targetUrl.host();
         const QString terms = targetUrl.path();
