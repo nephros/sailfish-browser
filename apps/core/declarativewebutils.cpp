@@ -39,6 +39,10 @@
 #include "browserpaths.h"
 
 static const auto defaultUserAgentUpdateUrl = QStringLiteral("https://browser.sailfishos.org/gecko/91.0/ua-update.json");
+static const auto searchScheme = QStringLiteral("websearch");
+static const auto searchDefaultKey = QStringLiteral("default");
+static const auto searchPrivateFrag = QStringLiteral("#private");
+static const QUrl constructSearchUrl(const QString &engineKey, const QString &terms, bool privateTab);
 
 static DeclarativeWebUtils *gSingleton = 0;
 
@@ -92,6 +96,15 @@ void DeclarativeWebUtils::openUrl(const QString &url)
 
         if (QFileInfo::exists(tmpUrl.path())) {
             targetUrl = tmpUrl;
+        }
+    }
+
+    if (!url.isEmpty() && (targetUrl.scheme() == searchScheme)) {
+        const QString engineKey = targetUrl.host();
+        const QString terms = targetUrl.path();
+        bool privateTab = targetUrl.fragment() == searchPrivateFrag;
+        if (!engineKey.isEmpty() && !terms.isEmpty()) {
+            targetUrl = constructSearchUrl(engineKey, terms, privateTab);
         }
     }
 
