@@ -56,6 +56,7 @@ static const QUrl constructSearchUrl(const QString &engineKey, const QString &te
     q.addQueryItem("kt", "Sail Sans Pro"); // font
     q.addQueryItem("q", terms);
     result.setQuery(q);
+    return result;
 }
 
 static DeclarativeWebUtils *gSingleton = 0;
