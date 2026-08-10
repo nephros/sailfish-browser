@@ -400,27 +400,14 @@ Page {
 
         // See coverAction combo on Settings page for values:
         CoverAction {
-            visible: coverActionConfig.value == "new_tab"
-            iconSource: "image://theme/icon-cover-new"
-            onTriggered: activateNewTabView()
-        }
-        CoverAction {
-            visible: coverActionConfig.value == "reload"
-            iconSource: "image://theme/icon-cover-refresh"
-            onTriggered: webView.reload()
-        }
-        CoverAction {
-            visible: coverActionConfig.value == "clipboard"
-            iconSource: "image://theme/icon-cover-clipboard"
-            onTriggered: { // see also: qml/pages/components/ToolBar.qml
-                var url = webView.url
-                if (url) {
-                    // encode the string if it looks like it has query or fragment parts
-                    // FIXME: could be improved with *proper* matching.
-                    Clipboard.text = ( (url.indexOf('?') > -1) || (url.indexOf('#') > -1) ) ? encodeURI(url) : url
+                iconSource: switch (coverActionConfig.value) {
+                        case "new_tab": return "image://theme/icon-cover-new"; break
+                        case "reload" : return "image://theme/icon-cover-refresh"; break
                 }
-            }
-
+                onTriggered: switch (coverActionConfig.value) {
+                        case "new_tab": activateNewTabView(); break
+                        case "reload" : webView.reload(); break
+                }
         }
     }
 

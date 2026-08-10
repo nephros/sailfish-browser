@@ -436,10 +436,6 @@ Page {
                         text: qsTrId("settings_browser-la-reload_page")
                         readonly property string value: "reload"
                     }
-                    MenuItem {
-                        text: qsTrId("sailfish_browser-me-copy-to-clipboard")
-                        readonly property string value: "clipboard"
-                    }
 
                     Component.onCompleted: {
                         if (text && (text === coverActionConfig.value)) {
