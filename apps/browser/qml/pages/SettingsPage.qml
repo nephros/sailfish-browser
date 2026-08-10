@@ -418,6 +418,45 @@ Page {
                 automaticCheck: false
                 onClicked: fixedToolbarConfig.value = !fixedToolbarConfig.value
             }
+            BrowserComboBox {
+                id: coverAction
+
+                //: Label for combobox that sets cover action used in browser cover
+                //% "Cover Action"
+                label: qsTrId("settings_browser-la-cover_action")
+                iconSource: "image://theme/icon-m-add-to-grid" // FIXME: better choice?
+
+                menu: ContextMenu {
+                    MenuItem {
+                        text: qsTrId("sailfish_browser-la-new_tab")
+                        readonly property string value: "new_tab"
+                    }
+                    MenuItem {
+                        text: qsTrId("sailfish_browser-la-new_private_tab")
+                        readonly property string value: "new_private_tab"
+                    }
+                    MenuItem {
+                        //% "Reload Page"
+                        text: qsTrId("settings_browser-la-reload_page")
+                        readonly property string value: "reload"
+                    }
+                    MenuItem {
+                        text: qsTrId("sailfish_browser-me-copy-to-clipboard")
+                        readonly property string value: "clipboard"
+                    }
+
+                    Component.onCompleted: {
+                        if (text && (text === coverActionConfig.value)) {
+                            coverAction.currentIndex = index
+                        }
+                    }
+                }
+                onCurrentItemChanged: {
+                    if (currentItem.value !== coverActionConfig.value) {
+                        coverActionConfig.value = currentItem.value
+                    }
+                }
+            }
         }
     }
 
@@ -454,6 +493,13 @@ Page {
 
         key: "/apps/sailfish-browser/settings/cutout_guard"
         defaultValue: "top_guard"
+    }
+
+    ConfigurationValue {
+        id: coverActionConfig
+
+        key: "/apps/sailfish-browser/settings/cover/action"
+        defaultValue: "new_tab"
     }
 
     ConfigurationValue {
