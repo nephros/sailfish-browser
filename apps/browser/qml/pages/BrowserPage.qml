@@ -404,12 +404,6 @@ Page {
             iconSource: "image://theme/icon-cover-new"
             onTriggered: activateNewTabView()
         }
-        CoverAction { // TODO: openNewPrivateTabView
-
-            visible: coverActionConfig.value == "new_private_tab"
-            iconSource: "image://theme/icon-m-incognito-new"
-            onTriggered: activateNewTabView(true)
-        }
         CoverAction {
             visible: coverActionConfig.value == "reload"
             iconSource: "image://theme/icon-cover-refresh"

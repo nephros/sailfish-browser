@@ -432,10 +432,6 @@ Page {
                         readonly property string value: "new_tab"
                     }
                     MenuItem {
-                        text: qsTrId("sailfish_browser-la-new_private_tab")
-                        readonly property string value: "new_private_tab"
-                    }
-                    MenuItem {
                         //% "Reload Page"
                         text: qsTrId("settings_browser-la-reload_page")
                         readonly property string value: "reload"
